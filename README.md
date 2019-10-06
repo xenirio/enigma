@@ -10,3 +10,6 @@
 
 3) Start Site
 > `ng serve`
+
+4) Install Angular Bootstrap (https://github.com/valor-software/ngx-bootstrap)
+> `ng add ngx-bootstrap`
