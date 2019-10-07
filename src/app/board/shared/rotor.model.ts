@@ -1,6 +1,7 @@
 export class Rotor {
     readonly STEP: number = 1;
     readonly KEY: number = 0;
+    private _initialState: number;
 
     id: string;
     ticks: number;
@@ -15,6 +16,7 @@ export class Rotor {
         if (attrs) {
             Object.assign(this, attrs);
             this.steps = this.state;
+            this._initialState = this.state;
         };
     }
 
@@ -26,5 +28,10 @@ export class Rotor {
                 this.state += this.STEP;
         }
         this.steps += this.STEP;
+    }
+
+    reset() {
+        this.state = this._initialState;
+        this.steps = this.state;
     }
 }

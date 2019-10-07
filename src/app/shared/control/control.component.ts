@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -8,6 +8,8 @@ import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-sv
 })
 export class ControlComponent implements OnInit {
   //@Input() started: number;
+  @Input() steps: number;
+  @Output() outReset: EventEmitter<any> = new EventEmitter();
   time: number = 0;
 
   constructor() {
@@ -23,4 +25,7 @@ export class ControlComponent implements OnInit {
   ngOnInit() {
   }
 
+  onReset() {
+    this.outReset.emit();
+  }
 }

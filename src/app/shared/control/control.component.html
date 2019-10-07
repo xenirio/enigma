@@ -10,7 +10,7 @@
     </ul>
     <ul class="nav navbar-nav abs-center-x">
       <li class="nav-item">
-        <button type="button" class="btn btn-primary btn-lg rounded-circle">
+        <button type="button" class="btn btn-primary btn-lg rounded-circle" (click)="onReset()">
             <fa-icon [icon]="faRedoAlt" size="lg"></fa-icon>
         </button>
       </li>
@@ -20,7 +20,7 @@
           <fa-icon [icon]="faShoePrints" size="lg"></fa-icon>
       </li>
       <li class="nav-item navbar-text text-center">
-          <span>0</span>
+          <span>{{steps}}</span>
       </li>
     </ul>
   </div>

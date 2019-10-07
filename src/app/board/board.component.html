@@ -1,2 +1,2 @@
-<app-rotor [rotor]="rotors['R01']" (outDial)="onDial($event)"></app-rotor>
-<app-control></app-control>
+<app-rotor [rotor]="rotors[0]" (outDial)="onDial($event)"></app-rotor>
+<app-control [steps]="steps.length" (outReset)="onReset($event)"></app-control>
