@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -7,15 +7,13 @@ import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-sv
   styleUrls: ['./control.component.css']
 })
 export class ControlComponent implements OnInit {
+  //@Input() started: number;
+  time: number = 0;
 
-  private _started;
-  time: number = 125959;
-
-  constructor() { 
-    this._started = new Date().getTime();
+  constructor() {
     /*setInterval(() => {
-      this.time = Math.floor((new Date().getTime() - this._started) / 1000)
-    });*/
+      this.time = Math.floor((new Date().getTime() - this.started) / 1000)
+    }, 1000);*/
   }
 
   faStopwatch = faStopwatch;
