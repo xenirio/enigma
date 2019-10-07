@@ -2,7 +2,7 @@
 A minimal brain game for all ages, written by angular - [check out the demo](http://enigma.apphb.com/)
 
 ## How to play
-rotate all roters to show the same green light, Easy!
+complete the mission by rotating all roters to show the same green light, Easy!
 
 
 ![enigma demo](https://lh5.googleusercontent.com/bZ7Alyx2QVNvPFUZrNReB4HCy4Gqw8Oqbvs1QMgaX-c5SWb5Cjv4xbLsxYXIsrXE9olwTV_bMCM7btVHnKZ9=w1920-h937)
