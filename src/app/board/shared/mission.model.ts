@@ -1,13 +1,25 @@
 import { Circuit } from "./circuit.model";
 import { Rotor } from "./rotor.model";
 
+export enum Symbol {
+    Reset = 0,
+    Nice = 1,
+    Excellent = 2
+}
+
 export class Mission {
+    major: number;
+    minor: number;
+    cover: string;
     layout: number[][];
     rotors: { [id: string]: Rotor } = {};
     circuits: { [id: string]: Circuit } = {};
     steps: string[] = [];
 
     constructor(attrs?: {
+        major: number,
+        minor: number,
+        cover: string,
         layout: number[][],
         rotors: { [id: string]: Rotor },
         circuits: { [id: string]: Circuit }

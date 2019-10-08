@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-svg-icons';
+import { faStopwatch, faUndoAlt, faShoePrints } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-control',
@@ -18,7 +18,7 @@ export class ControlComponent implements OnInit {
   }
 
   faStopwatch = faStopwatch;
-  faRedoAlt = faRedoAlt;
+  faUndoAlt = faUndoAlt;
   faShoePrints = faShoePrints;
 
   ngOnInit() {

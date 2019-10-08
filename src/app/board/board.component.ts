@@ -1,4 +1,4 @@
-import { Mission } from './shared/mission.model';
+import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
 import { Rotor } from './shared/rotor.model';
@@ -15,6 +15,8 @@ export class BoardComponent implements OnInit {
   positions: any[] = [];
   started: number;
   steps: string[] = [];
+  symbol: Symbol;
+  cover: string;
 
   get rotors(): Rotor[] {
     return Object.keys(this.mission.rotors).map(k => this.mission.rotors[k]);
@@ -40,6 +42,9 @@ export class BoardComponent implements OnInit {
     };
     this._missions = [
       new Mission({
+        major: 0,
+        minor: 1,
+        cover: "touch rotor to make it green",
         layout: [
           [1]
         ],
@@ -54,6 +59,9 @@ export class BoardComponent implements OnInit {
         }
       }),
       new Mission({
+        major: 0,
+        minor: 2,
+        cover: "make rotors all green",
         layout: [
           [1],
           [1]
@@ -81,10 +89,12 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
     this.start(this._missions.pop());
+    this.started = new Date().getTime();
   }
 
   start(mission: Mission) {
     this.mission = mission;
+    this.cover = mission.cover;
     this.steps = [];
     this.positions = [];
 
@@ -110,7 +120,6 @@ export class BoardComponent implements OnInit {
         }
       }
     }
-    this.started = new Date().getTime();
   }
 
   onDial(id: string) {
@@ -120,12 +129,15 @@ export class BoardComponent implements OnInit {
       this.mission.steps = this.steps;
       setTimeout(() => {
         this.start(this._missions.pop());
-      }, 2000);
+      }, 1000);
     }
   }
 
   onReset() {
     this.steps = [];
+    this.symbol = Symbol.Reset;
+    this.cover = "reset";
+
     this.mission.reset();
   }
 }
