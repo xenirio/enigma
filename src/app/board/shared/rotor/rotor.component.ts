@@ -10,7 +10,7 @@ export class RotorComponent implements OnInit {
   @Input() rotor: Rotor;
   @Output() outDial = new EventEmitter<string>();
 
-  static readonly ROTOR_SIZE: number = 90;
+  static readonly ROTOR_SIZE: number = 86;
   static readonly TICK_SIZE: number = 4;
   readonly RADIUS: number = 35;
   private _tickTheta: number;

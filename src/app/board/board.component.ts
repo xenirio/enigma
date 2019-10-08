@@ -1,8 +1,6 @@
-import { RotorComponent } from './shared/rotor/rotor.component';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
 import { Rotor } from './shared/rotor.model';
-import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-board',
@@ -55,10 +53,11 @@ export class BoardComponent implements OnInit {
   ngOnInit() {
     let rows = this.layout.length;
     let columns = this.layout[0].length;
+    let margin = 100;
 
     let dimension = {
-      width: RotorComponent.ROTOR_SIZE * columns,
-      height: RotorComponent.ROTOR_SIZE * rows
+      width: margin * columns,
+      height: margin * rows
     };
     let start_point = {
       x: (window.innerWidth - (dimension.width)) / 2,
@@ -68,8 +67,8 @@ export class BoardComponent implements OnInit {
       for (var j = 0; j < columns; j++) {
         if (this.layout[i][j] === 1) {
           this.positions.push({
-            y: start_point.y + (i * RotorComponent.ROTOR_SIZE),
-            x: start_point.x + (j * RotorComponent.ROTOR_SIZE)
+            y: start_point.y + (i * margin),
+            x: start_point.x + (j * margin)
           });
         }
       }
