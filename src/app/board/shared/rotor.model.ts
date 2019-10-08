@@ -20,14 +20,13 @@ export class Rotor {
         };
     }
 
+    get isUnlock(): boolean {
+        return this.state === this.KEY;
+    }
+
     rotate() {
-        if (this.steps > 0) {
-            if (this.state == this.ticks - 1)
-                this.state = 0;
-            else
-                this.state += this.STEP;
-        }
         this.steps += this.STEP;
+        this.state = this.steps%this.ticks;
     }
 
     reset() {
