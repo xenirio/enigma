@@ -7,15 +7,15 @@ import { faStopwatch, faRedoAlt, faShoePrints } from '@fortawesome/free-solid-sv
   styleUrls: ['./control.component.css']
 })
 export class ControlComponent implements OnInit {
-  //@Input() started: number;
+  @Input() started: number;
   @Input() steps: number;
   @Output() outReset: EventEmitter<any> = new EventEmitter();
   time: number = 0;
 
   constructor() {
-    /*setInterval(() => {
-      this.time = Math.floor((new Date().getTime() - this.started) / 1000)
-    }, 1000);*/
+    setInterval(() => {
+      this.time = (new Date().getTime() - this.started)
+    }, 1000);
   }
 
   faStopwatch = faStopwatch;
