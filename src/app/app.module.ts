@@ -8,6 +8,7 @@ import { HeaderComponent } from './shared/header/header.component';
 import { ControlComponent } from './shared/control/control.component';
 import { BoardComponent } from './board/board.component';
 import { RotorComponent } from './board/shared/rotor/rotor.component';
+import { SplashComponent } from './shared/splash/splash.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { RotorComponent } from './board/shared/rotor/rotor.component';
     HeaderComponent,
     ControlComponent,
     BoardComponent,
-    RotorComponent
+    RotorComponent,
+    SplashComponent
   ],
   imports: [
     Routings,

@@ -1,3 +1,4 @@
+import { Mission } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
 import { Rotor } from './shared/rotor.model';
@@ -8,51 +9,87 @@ import { Rotor } from './shared/rotor.model';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-  private _rotors: { [id: string]: Rotor } = {};
-  layout: number[][];
-  positions: any[] = [];
-  circuits: { [id: string]: Circuit } = {};
+  private _missions: Mission[] = [];
 
+  mission: Mission;
+  positions: any[] = [];
   started: number;
   steps: string[] = [];
 
   get rotors(): Rotor[] {
-    return Object.keys(this._rotors).map(k => this._rotors[k]);
+    return Object.keys(this.mission.rotors).map(k => this.mission.rotors[k]);
   }
 
   constructor() {
-    this.started = new Date().getTime();
-    this._rotors["R01"] = new Rotor({
-      id: "R01",
-      ticks: 2,
-      state: 1
-    });
-    this._rotors["R02"] = new Rotor({
-      id: "R02",
-      ticks: 2,
-      state: 0
-    });
-    this.layout = [
-      [1],
-      [1]
-    ];
-    this.circuits = {
-      "R01": new Circuit({
-        dial: this._rotors["R01"],
-        rotors: [
-          this._rotors["R02"]
-        ]
+    let tutorialRoters = {
+      "R001": new Rotor({
+        id: "R001",
+        ticks: 2,
+        state: 1
       }),
-      "R02": new Circuit({
-        dial: this._rotors["R02"],
-        rotors: []
+      "R011": new Rotor({
+        id: "R011",
+        ticks: 2,
+        state: 1
+      }),
+      "R012": new Rotor({
+        id: "R012",
+        ticks: 2,
+        state: 0
       })
     };
+    this._missions = [
+      new Mission({
+        layout: [
+          [1]
+        ],
+        rotors: {
+          "R001": tutorialRoters["R001"]
+        },
+        circuits: {
+          "R001": new Circuit({
+            dial: tutorialRoters["R001"],
+            rotors: []
+          })
+        }
+      }),
+      new Mission({
+        layout: [
+          [1],
+          [1]
+        ],
+        rotors: {
+          "R011": tutorialRoters["R011"],
+          "R012": tutorialRoters["R012"]
+        },
+        circuits: {
+          "R011": new Circuit({
+            dial: tutorialRoters["R011"],
+            rotors: [
+              tutorialRoters["R012"]
+            ]
+          }),
+          "R012": new Circuit({
+            dial: tutorialRoters["R012"],
+            rotors: []
+          })
+        }
+      })
+    ];
+    this._missions = this._missions.reverse();
   }
 
   ngOnInit() {
-    let rows = this.layout.length;
-    let columns = this.layout[0].length;
+    this.start(this._missions.pop());
+  }
+
+  start(mission: Mission) {
+    this.mission = mission;
+    this.steps = [];
+    this.positions = [];
+
+    let rows = this.mission.layout.length;
+    let columns = this.mission.layout[0].length;
     let margin = 100;
 
     let dimension = {
@@ -65,7 +102,7 @@ export class BoardComponent implements OnInit {
     };
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < columns; j++) {
-        if (this.layout[i][j] === 1) {
+        if (this.mission.layout[i][j] === 1) {
           this.positions.push({
             y: start_point.y + (i * margin),
             x: start_point.x + (j * margin)
@@ -73,17 +110,22 @@ export class BoardComponent implements OnInit {
         }
       }
     }
+    this.started = new Date().getTime();
   }
 
   onDial(id: string) {
-    let circuit = this.circuits[id];
-    circuit.dial.rotate();
-    circuit.rotors.forEach(r => { r.rotate(); });
+    this.mission.dial(id);
     this.steps.push(id);
+    if (this.mission.unlocked && this._missions.length > 0) {
+      this.mission.steps = this.steps;
+      setTimeout(() => {
+        this.start(this._missions.pop());
+      }, 2000);
+    }
   }
 
   onReset() {
     this.steps = [];
-    Object.keys(this._rotors).forEach(k => this._rotors[k].reset());
+    this.mission.reset();
   }
 }

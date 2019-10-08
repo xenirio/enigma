@@ -10,12 +10,11 @@ export class ControlComponent implements OnInit {
   @Input() started: number;
   @Input() steps: number;
   @Output() outReset: EventEmitter<any> = new EventEmitter();
+
+  private _timer: any;
   time: number = 0;
 
   constructor() {
-    setInterval(() => {
-      this.time = (new Date().getTime() - this.started)
-    }, 1000);
   }
 
   faStopwatch = faStopwatch;
@@ -23,6 +22,13 @@ export class ControlComponent implements OnInit {
   faShoePrints = faShoePrints;
 
   ngOnInit() {
+    /*this._timer = setInterval(() => {
+      this.time = (new Date().getTime() - this.started)
+    }, 1000);*/
+  }
+
+  ngOnDestroy() {
+    clearInterval(this._timer);
   }
 
   onReset() {

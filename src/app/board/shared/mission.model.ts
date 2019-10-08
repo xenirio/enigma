@@ -1,0 +1,31 @@
+import { Circuit } from "./circuit.model";
+import { Rotor } from "./rotor.model";
+
+export class Mission {
+    layout: number[][];
+    rotors: { [id: string]: Rotor } = {};
+    circuits: { [id: string]: Circuit } = {};
+    steps: string[] = [];
+
+    constructor(attrs?: {
+        layout: number[][],
+        rotors: { [id: string]: Rotor },
+        circuits: { [id: string]: Circuit }
+    }) {
+        if (attrs) Object.assign(this, attrs);
+    }
+
+    get unlocked() {
+        return Object.keys(this.rotors).filter(k => !this.rotors[k].isUnlock).length === 0;
+    }
+
+    dial(id: string) {
+        let circuit = this.circuits[id];
+        circuit.dial.rotate();
+        circuit.rotors.forEach(r => { r.rotate(); });
+    }
+
+    reset() {
+        Object.keys(this.rotors).forEach(k => this.rotors[k].reset());
+    }
+}
