@@ -40,7 +40,7 @@ export class RotorComponent implements OnInit {
     return (this.rotor.steps * this._tickDegree) + 45;
   }
 
-  private dial() {
+  dial() {
     this.outDial.emit(this.rotor.id);
   }
 }
