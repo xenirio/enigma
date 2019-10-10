@@ -11,7 +11,7 @@ export class Mission {
     major: number;
     minor: number;
     cover: string;
-    layout: number[][];
+    layout: string[][];
     rotors: { [id: string]: Rotor } = {};
     circuits: { [id: string]: Circuit } = {};
     steps: string[] = [];
@@ -20,7 +20,7 @@ export class Mission {
         major: number,
         minor: number,
         cover: string,
-        layout: number[][],
+        layout: string[][],
         rotors: { [id: string]: Rotor },
         circuits: { [id: string]: Circuit }
     }) {

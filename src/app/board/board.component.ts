@@ -2,6 +2,7 @@ import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
 import { Rotor } from './shared/rotor.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -22,63 +23,67 @@ export class BoardComponent implements OnInit {
     return Object.keys(this.mission.rotors).map(k => this.mission.rotors[k]);
   }
 
-  constructor() {
+  get unlocked(): boolean {
+    return this.mission.unlocked;
+  }
+
+  constructor(private _router: Router) {
     let tutorialRoters = {
-      "R001": new Rotor({
-        id: "R001",
+      "R111": new Rotor({
+        id: "R111",
         ticks: 2,
         state: 1
       }),
-      "R011": new Rotor({
-        id: "R011",
+      "R121": new Rotor({
+        id: "R121",
         ticks: 2,
         state: 1
       }),
-      "R012": new Rotor({
-        id: "R012",
+      "R122": new Rotor({
+        id: "R122",
         ticks: 2,
         state: 0
       })
     };
     this._missions = [
       new Mission({
-        major: 0,
+        major: 1,
         minor: 1,
         cover: "touch rotor to make it green",
         layout: [
-          [1]
+          ["R111"]
         ],
         rotors: {
-          "R001": tutorialRoters["R001"]
+          "R111": tutorialRoters["R111"]
         },
         circuits: {
-          "R001": new Circuit({
-            dial: tutorialRoters["R001"],
+          "R111": new Circuit({
+            dial: tutorialRoters["R111"],
             rotors: []
           })
         }
       }),
       new Mission({
-        major: 0,
+        major: 1,
         minor: 2,
-        cover: "make rotors all green",
+        cover: "make rotors green",
         layout: [
-          [1],
-          [1]
+          ["R121"],
+          ["R122"]
         ],
         rotors: {
-          "R011": tutorialRoters["R011"],
-          "R012": tutorialRoters["R012"]
+          "R121": tutorialRoters["R121"],
+          "R122": tutorialRoters["R122"]
         },
         circuits: {
-          "R011": new Circuit({
-            dial: tutorialRoters["R011"],
+          "R121": new Circuit({
+            dial: tutorialRoters["R121"],
             rotors: [
-              tutorialRoters["R012"]
+              tutorialRoters["R122"]
             ]
           }),
-          "R012": new Circuit({
-            dial: tutorialRoters["R012"],
+          "R122": new Circuit({
+            dial: tutorialRoters["R122"],
             rotors: []
           })
         }
@@ -112,7 +117,7 @@ export class BoardComponent implements OnInit {
     };
     for (var i = 0; i < rows; i++) {
       for (var j = 0; j < columns; j++) {
-        if (this.mission.layout[i][j] === 1) {
+        if (this.mission.layout[i][j] !== null) {
           this.positions.push({
             y: start_point.y + (i * margin),
             x: start_point.x + (j * margin)
@@ -125,10 +130,15 @@ export class BoardComponent implements OnInit {
   onDial(id: string) {
     this.mission.dial(id);
     this.steps.push(id);
-    if (this.mission.unlocked && this._missions.length > 0) {
+    if (this.unlocked) {
       this.mission.steps = this.steps;
       setTimeout(() => {
-        this.start(this._missions.pop());
+        if (this._missions.length === 0) {
+          this._router.navigate(['/score']);
+        }
+        else {
+          this.start(this._missions.pop());
+        }
       }, 1000);
     }
   }

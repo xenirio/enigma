@@ -18,7 +18,7 @@ export class SplashComponent implements OnInit {
     this._visible = visible;
     clearTimeout(this._timer);
     if (this.icon !== undefined)
-      this._timer = setTimeout(() => { this.dismiss() }, 600);
+      this._timer = setTimeout(() => { this.dismiss() }, 700);
   }
 
   get icon(): IconDefinition {
