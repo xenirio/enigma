@@ -1,3 +1,4 @@
+import { MissionScoreService } from './../mission-score.service';
 import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class BoardComponent implements OnInit {
   private _missions: Mission[] = [];
+  private _completes: Mission[] = [];
 
   mission: Mission;
   positions: any[] = [];
@@ -27,7 +29,7 @@ export class BoardComponent implements OnInit {
     return this.mission.unlocked;
   }
 
-  constructor(private _router: Router) {
+  constructor(private _router: Router, private _missionScoreService: MissionScoreService) {
     let tutorialRoters = {
       "R111": new Rotor({
         id: "R111",
@@ -61,7 +63,8 @@ export class BoardComponent implements OnInit {
             dial: tutorialRoters["R111"],
             rotors: []
           })
-        }
+        },
+        answer: 1
       }),
       new Mission({
         major: 1,
@@ -86,22 +89,72 @@ export class BoardComponent implements OnInit {
             dial: tutorialRoters["R122"],
             rotors: []
           })
-        }
+        },
+        answer: 2
       })
     ];
+    
+    let missionRoters = {
+      "R131": new Rotor({
+        id: "R131",
+        ticks: 2,
+        state: 1
+      }),
+      "R132": new Rotor({
+        id: "R132",
+        ticks: 2,
+        state: 1
+      }),
+      "R133": new Rotor({
+        id: "R133",
+        ticks: 2,
+        state: 1
+      })
+    }
+    this._missions.push(new Mission({
+      major: 1,
+      minor: 3,
+      cover: "",
+      layout: [
+        [null, "R131", null],
+        ["R132", null, "R133"]
+      ],
+      rotors: {
+        "R131": missionRoters["R131"],
+        "R132": missionRoters["R132"],
+        "R133": missionRoters["R133"]
+      },
+      circuits: {
+        "R131": new Circuit({
+          dial: missionRoters["R131"],
+          rotors: []
+        }),
+        "R132": new Circuit({
+          dial: missionRoters["R132"],
+          rotors: []
+        }),
+        "R133": new Circuit({
+          dial: missionRoters["R133"],
+          rotors: []
+        })
+      },
+      answer: 3
+    }));
+
     this._missions = this._missions.reverse();
   }
 
   ngOnInit() {
     this.start(this._missions.pop());
-    this.started = new Date().getTime();
   }
 
   start(mission: Mission) {
     this.mission = mission;
     this.cover = mission.cover;
-    this.steps = [];
     this.positions = [];
+    this.steps = [];
+    if(this._completes.length == 2)
+      this.started = new Date().getTime();
 
     let rows = this.mission.layout.length;
     let columns = this.mission.layout[0].length;
@@ -132,8 +185,12 @@ export class BoardComponent implements OnInit {
     this.steps.push(id);
     if (this.unlocked) {
       this.mission.steps = this.steps;
+      this._completes.push(this.mission);
       setTimeout(() => {
         if (this._missions.length === 0) {
+          this._missionScoreService.time = new Date().getTime() - this.started;
+          this._missionScoreService.steps = this._completes.map(m => m.steps.length).reduce((sum, current) => sum + current, 0);
+          this._missionScoreService.answer = this._completes.map(m => m.answer).reduce((sum, current) => sum + current, 0);
           this._router.navigate(['/score']);
         }
         else {

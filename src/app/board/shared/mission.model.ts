@@ -15,6 +15,7 @@ export class Mission {
     rotors: { [id: string]: Rotor } = {};
     circuits: { [id: string]: Circuit } = {};
     steps: string[] = [];
+    answer: number;
 
     constructor(attrs?: {
         major: number,
@@ -22,7 +23,8 @@ export class Mission {
         cover: string,
         layout: string[][],
         rotors: { [id: string]: Rotor },
-        circuits: { [id: string]: Circuit }
+        circuits: { [id: string]: Circuit },
+        answer: number
     }) {
         if (attrs) Object.assign(this, attrs);
     }

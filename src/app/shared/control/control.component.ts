@@ -7,24 +7,27 @@ import { faStopwatch, faUndoAlt, faShoePrints } from '@fortawesome/free-solid-sv
   styleUrls: ['./control.component.css']
 })
 export class ControlComponent implements OnInit {
-  @Input() started: number;
+  @Input()
+  set started(time: number) {
+    if(time !== undefined) {
+      this._timer = setInterval(() => {
+        this.time = (new Date().getTime() - time)
+      }, 1000);
+    }
+  }
   @Input() steps: number;
   @Output() outReset: EventEmitter<any> = new EventEmitter();
 
   private _timer: any;
   time: number = 0;
-
-  constructor() {
-  }
-
   faStopwatch = faStopwatch;
   faUndoAlt = faUndoAlt;
   faShoePrints = faShoePrints;
 
+  constructor() {
+  }
+
   ngOnInit() {
-    /*this._timer = setInterval(() => {
-      this.time = (new Date().getTime() - this.started)
-    }, 1000);*/
   }
 
   ngOnDestroy() {
