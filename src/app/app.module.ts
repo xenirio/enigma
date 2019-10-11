@@ -1,5 +1,6 @@
+import { MissionService } from './board/shared/mission.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { Routings } from './app.routing';
@@ -10,6 +11,9 @@ import { BoardComponent } from './board/board.component';
 import { RotorComponent } from './board/shared/rotor/rotor.component';
 import { SplashComponent } from './shared/splash/splash.component';
 import { ScoreComponent } from './score/score.component';
+import { ApiService } from './shared/api/api.service';
+import { ProxyConfigService } from './shared/api/proxy.config.service';
+import { HttpModule } from '@angular/http';
 
 @NgModule({
   declarations: [
@@ -22,11 +26,17 @@ import { ScoreComponent } from './score/score.component';
     ScoreComponent
   ],
   imports: [
+    HttpModule,
     Routings,
     BrowserModule,
     FontAwesomeModule
   ],
-  providers: [],
+  providers: [
+    ApiService,
+    MissionService,
+    ProxyConfigService,
+    { provide: APP_INITIALIZER, useFactory: (config: ProxyConfigService) => () => config.load(), deps: [ProxyConfigService], multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

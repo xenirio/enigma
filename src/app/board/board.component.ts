@@ -1,3 +1,4 @@
+import { MissionService } from './shared/mission.service';
 import { MissionScoreService } from './../mission-score.service';
 import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
@@ -11,6 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
+  private _level: number = 1;
   private _missions: Mission[] = [];
   private _completes: Mission[] = [];
 
@@ -29,7 +31,10 @@ export class BoardComponent implements OnInit {
     return this.mission.unlocked;
   }
 
-  constructor(private _router: Router, private _missionScoreService: MissionScoreService) {
+  constructor(
+    private _router: Router, 
+    private _missionScoreService: MissionScoreService,
+    private _missionService: MissionService) {
     let tutorialRoters = {
       "R111": new Rotor({
         id: "R111",
@@ -93,8 +98,9 @@ export class BoardComponent implements OnInit {
         answer: 2
       })
     ];
-    
-    let missionRoters = {
+    this._missions = this._missions.reverse();
+    this.start(this._missions.pop());
+    /*let missionRoters = {
       "R131": new Rotor({
         id: "R131",
         ticks: 2,
@@ -139,13 +145,17 @@ export class BoardComponent implements OnInit {
         })
       },
       answer: 3
-    }));
-
-    this._missions = this._missions.reverse();
+    }));*/
   }
 
   ngOnInit() {
-    this.start(this._missions.pop());
+    this._missionService.get.mission.list(this._level.toString()).subscribe(missions => {
+      if(this._level === 1)
+        missions = missions.slice(2);
+      this._missions = this._missions.concat(missions).reverse();
+      console.log(this._missions);
+      //this._missions = this._missions.reverse();
+    });
   }
 
   start(mission: Mission) {
