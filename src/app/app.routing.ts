@@ -9,6 +9,10 @@ const appRoutes: Routes = [
         path: '', 
         component: BoardComponent
     },
+    { 
+        path: 'mission/:level', 
+        component: BoardComponent
+    },
     {
         path: 'score',
         component: ScoreComponent

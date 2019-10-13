@@ -1,3 +1,4 @@
+import { ScoreService } from './shared/score/score.service';
 import { MissionService } from './board/shared/mission.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
@@ -35,6 +36,7 @@ import { HttpModule } from '@angular/http';
     ApiService,
     MissionService,
     ProxyConfigService,
+    ScoreService,
     { provide: APP_INITIALIZER, useFactory: (config: ProxyConfigService) => () => config.load(), deps: [ProxyConfigService], multi: true },
   ],
   bootstrap: [AppComponent]

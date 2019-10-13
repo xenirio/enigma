@@ -1,7 +1,9 @@
+import { ScoreService } from './../shared/score/score.service';
 import { Component, OnInit } from '@angular/core';
 import { faStar as farStar } from '@fortawesome/free-regular-svg-icons';
 import { faStopwatch, faShoePrints, faStar as fasStar } from '@fortawesome/free-solid-svg-icons';
 import { MissionScoreService } from '../mission-score.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-score',
@@ -18,7 +20,11 @@ export class ScoreComponent implements OnInit {
   steps: number;
   compliment: string;
 
-  constructor(private _missionScoreService: MissionScoreService) { }
+  constructor(
+    private _missionScoreService: MissionScoreService,
+    private _scoreService: ScoreService,
+    private _router: Router
+  ) { }
 
   ngOnInit() {
     this.time = this._missionScoreService.time;
@@ -57,12 +63,6 @@ export class ScoreComponent implements OnInit {
         this.compliment = "";
         break;
     }
-    if (score == 5) {
-      this.compliment = "Excellent!";
-    }
-    else if (score == 4) {
-
-    }
     return stars;
   }
 
@@ -71,5 +71,18 @@ export class ScoreComponent implements OnInit {
     do {
       name = prompt("Player Name:");
     } while (name === "")
+    if(name == null)
+      return;
+    let level = this._missionScoreService.level;
+    if(level === undefined || this.time === undefined || this.steps === undefined)
+      return;
+    this._scoreService.submit.score(name, level, this.time, this.steps)
+    .subscribe((success) => {
+      if(success === true) {
+        level++;
+        this._missionScoreService.level = level;
+        this._router.navigate(['/mission', level]);
+      }
+    });
   }
 }

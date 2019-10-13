@@ -4,7 +4,7 @@ import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
 import { Rotor } from './shared/rotor.model';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-board',
@@ -16,7 +16,15 @@ export class BoardComponent implements OnInit {
   private _missions: Mission[] = [];
   private _completes: Mission[] = [];
 
-  mission: Mission;
+  mission: Mission = new Mission({
+    major: 0,
+    minor: 0,
+    cover: "",
+    layout: [],
+    rotors: {},
+    circuits: {},
+    answer: 0
+  });
   positions: any[] = [];
   started: number;
   steps: string[] = [];
@@ -32,7 +40,8 @@ export class BoardComponent implements OnInit {
   }
 
   constructor(
-    private _router: Router, 
+    private _router: Router,
+    private _activatedRoute: ActivatedRoute,
     private _missionScoreService: MissionScoreService,
     private _missionService: MissionService) {
     let tutorialRoters = {
@@ -98,64 +107,26 @@ export class BoardComponent implements OnInit {
         answer: 2
       })
     ];
-    this._missions = this._missions.reverse();
-    this.start(this._missions.pop());
-    /*let missionRoters = {
-      "R131": new Rotor({
-        id: "R131",
-        ticks: 2,
-        state: 1
-      }),
-      "R132": new Rotor({
-        id: "R132",
-        ticks: 2,
-        state: 1
-      }),
-      "R133": new Rotor({
-        id: "R133",
-        ticks: 2,
-        state: 1
-      })
-    }
-    this._missions.push(new Mission({
-      major: 1,
-      minor: 3,
-      cover: "",
-      layout: [
-        [null, "R131", null],
-        ["R132", null, "R133"]
-      ],
-      rotors: {
-        "R131": missionRoters["R131"],
-        "R132": missionRoters["R132"],
-        "R133": missionRoters["R133"]
-      },
-      circuits: {
-        "R131": new Circuit({
-          dial: missionRoters["R131"],
-          rotors: []
-        }),
-        "R132": new Circuit({
-          dial: missionRoters["R132"],
-          rotors: []
-        }),
-        "R133": new Circuit({
-          dial: missionRoters["R133"],
-          rotors: []
-        })
-      },
-      answer: 3
-    }));*/
   }
 
   ngOnInit() {
-    this._missionService.get.mission.list(this._level.toString()).subscribe(missions => {
-      if(this._level === 1)
-        missions = missions.slice(2);
-      this._missions = this._missions.concat(missions).reverse();
-      console.log(this._missions);
-      //this._missions = this._missions.reverse();
-    });
+    this._activatedRoute.paramMap.subscribe(params => {
+      let level = parseInt(params.get("level"));
+      if (isNaN(level))
+        level = 1;
+      this._level = level;
+      this._missionService.get.mission.list(this._level.toString()).subscribe(missions => {
+        if (this._level === 1)
+          missions = missions.slice(2);
+        else if(this._level > 1)
+          this._missions = [];
+        this._missions = this._missions.concat(missions).reverse();
+        this.start(this._missions.pop());
+      });
+    })
+  }
+
+  ngOnDestroy() {
   }
 
   start(mission: Mission) {
@@ -163,7 +134,7 @@ export class BoardComponent implements OnInit {
     this.cover = mission.cover;
     this.positions = [];
     this.steps = [];
-    if(this._completes.length == 2)
+    if (this._completes.length == 2)
       this.started = new Date().getTime();
 
     let rows = this.mission.layout.length;
@@ -198,6 +169,7 @@ export class BoardComponent implements OnInit {
       this._completes.push(this.mission);
       setTimeout(() => {
         if (this._missions.length === 0) {
+          this._missionScoreService.level = this._level;
           this._missionScoreService.time = new Date().getTime() - this.started;
           this._missionScoreService.steps = this._completes.map(m => m.steps.length).reduce((sum, current) => sum + current, 0);
           this._missionScoreService.answer = this._completes.map(m => m.answer).reduce((sum, current) => sum + current, 0);
