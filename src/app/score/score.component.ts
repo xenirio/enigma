@@ -67,21 +67,25 @@ export class ScoreComponent implements OnInit {
   }
 
   onSubmit() {
-    let name = "";
+    let name = localStorage.getItem("player");
+    console.log(name);
+    if(name === null)
+      name = "";
     do {
       name = prompt("Player Name:");
     } while (name === "")
     if(name == null)
       return;
+    localStorage.setItem("player", name);
     let level = this._missionScoreService.level;
     if(level === undefined || this.time === undefined || this.steps === undefined)
       return;
-    this._scoreService.submit.score(name, level, this.time, this.steps)
+    this._scoreService.submit.score(name, level, Math.floor(this.time / 1000), this.steps)
     .subscribe((success) => {
       if(success === true) {
         level++;
         this._missionScoreService.level = level;
-        this._router.navigate(['/mission', level]);
+        this._router.navigate(['/ranking']);
       }
     });
   }

@@ -134,7 +134,7 @@ export class BoardComponent implements OnInit {
     this.cover = mission.cover;
     this.positions = [];
     this.steps = [];
-    if (this._completes.length == 2)
+    if ((this._level == 1 && this._completes.length == 2) || this._level > 1)
       this.started = new Date().getTime();
 
     let rows = this.mission.layout.length;

@@ -15,6 +15,7 @@ import { ScoreComponent } from './score/score.component';
 import { ApiService } from './shared/api/api.service';
 import { ProxyConfigService } from './shared/api/proxy.config.service';
 import { HttpModule } from '@angular/http';
+import { RankingComponent } from './ranking/ranking.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { HttpModule } from '@angular/http';
     BoardComponent,
     RotorComponent,
     SplashComponent,
-    ScoreComponent
+    ScoreComponent,
+    RankingComponent
   ],
   imports: [
     HttpModule,
