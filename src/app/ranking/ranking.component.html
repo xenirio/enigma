@@ -25,12 +25,12 @@
             <fa-icon [icon]="faTrophy" size="sm"></fa-icon>
           </th>
           <th scope="col" class="w-60">Player</th>
-          <th scope="col" class="w-20 text-center">Score</th>
+          <th scope="col" class="w-20 text-center">Best</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let s of scores; let i = index;">
-          <th scope="row" class="text-center">{{i + 1}}</th>
+          <td scope="row" class="text-center">{{i + 1}}</td>
           <td>{{s.player}}</td>
           <td class="text-center">{{s.score}}</td>
         </tr>
@@ -39,7 +39,7 @@
   </div>
 </div>
 <nav class="navbar fixed-bottom navbar-dark bg-dark">
-  <button type="button" class="btn btn-success btn-lg btn-block" (click)="onContinue()">
+  <button type="button" class="btn btn-primary btn-lg btn-block" (click)="onContinue()">
     Next Mission
   </button>
 </nav>

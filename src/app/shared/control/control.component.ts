@@ -9,9 +9,9 @@ import { faStopwatch, faUndoAlt, faShoePrints } from '@fortawesome/free-solid-sv
 export class ControlComponent implements OnInit {
   @Input()
   set started(time: number) {
-    if(time !== undefined) {
+    if(time !== undefined && this._timer === undefined) {
       this._timer = setInterval(() => {
-        this.time = (new Date().getTime() - time)
+        this.time += 1000;
       }, 1000);
     }
   }

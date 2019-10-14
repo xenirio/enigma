@@ -29,11 +29,17 @@ export class ScoreComponent implements OnInit {
   ngOnInit() {
     this.time = this._missionScoreService.time;
     this.steps = this._missionScoreService.steps;
+
+    let level = this._missionScoreService.level;
+    if (level !== undefined) {
+      level++;
+      this._missionScoreService.level = level;
+    }
   }
 
   get stars(): number[] {
-    let boundary = this._missionScoreService.answer * 6;
-    let score = Math.floor((boundary - this.steps) / 6);
+    let boundary = this._missionScoreService.answer;
+    let score = Math.floor((boundary/this.steps) * 5);
     if (score > 5)
       score = 5;
     if (score < 1)
@@ -68,25 +74,29 @@ export class ScoreComponent implements OnInit {
 
   onSubmit() {
     let name = localStorage.getItem("player");
-    console.log(name);
-    if(name === null)
+    if (name === null)
       name = "";
     do {
       name = prompt("Player Name:");
     } while (name === "")
-    if(name == null)
+    if (name == null)
       return;
     localStorage.setItem("player", name);
     let level = this._missionScoreService.level;
-    if(level === undefined || this.time === undefined || this.steps === undefined)
+    if (level === undefined || this.time === undefined || this.steps === undefined)
       return;
     this._scoreService.submit.score(name, level, Math.floor(this.time / 1000), this.steps)
-    .subscribe((success) => {
-      if(success === true) {
-        level++;
-        this._missionScoreService.level = level;
-        this._router.navigate(['/ranking']);
-      }
-    });
+      .subscribe((success) => {
+        if (success === true) {
+          this._router.navigate(['/ranking']);
+        }
+      });
+  }
+
+  onContinue() {
+    let level = this._missionScoreService.level;
+    if (level === undefined)
+      level = 1;
+    this._router.navigate(['/mission', level]);
   }
 }
