@@ -1,5 +1,5 @@
-<div class="splash-background" [ngClass]="visibility"></div>
 <div class="splash-wrapper" [ngClass]="visibility">
+  <div class="splash-background"></div>
   <div class="well mission-splash">
     <h3>
       <fa-icon [icon]="icon" size="3x" *ngIf="icon !== undefined"></fa-icon>
@@ -7,8 +7,7 @@
     <h3>
       {{title}}
     </h3>
-    <button (click)="dismiss()" class="btn-close-overlay btn-block"
-      *ngIf="icon === undefined">Go</button>
+    <button (click)="dismiss()" class="btn-close-overlay btn-block" *ngIf="icon === undefined">Go</button>
   </div>
   <div class="popup_align" style="display: inline-block; vertical-align: middle; height: 100%;"></div>
 </div>
